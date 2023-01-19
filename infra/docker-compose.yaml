@@ -1,0 +1,29 @@
+version: '3.10'
+
+services:
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - postgres:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./.env
+    # healthcheck:
+    #   test: "pg_isready -U postgres"
+    #   interval: 3s
+  web:
+    build: ../src
+    restart: always
+    volumes:
+      - static_value:/app/static/
+    ports:
+      - "8000:8000"
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+    env_file:
+      - ./.env
+volumes:
+  postgres:
+  static_value:
